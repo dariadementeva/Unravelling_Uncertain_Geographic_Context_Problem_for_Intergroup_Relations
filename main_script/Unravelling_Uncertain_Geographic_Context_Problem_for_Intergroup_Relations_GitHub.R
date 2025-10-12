@@ -114,73 +114,92 @@ data("BE_ADMIN_MUNTY") # municipalities
 ################################################################################################################
 
 # Read in Pseudoaddresses to Match with Walking and Driving Time Polygons
-
- pt_buffer_points_final <- read_csv("/Users/dariadementeva/Desktop/pt_buffer_points_final.csv")
-
+ 
+pt_buffer_points_final <- read_csv("/Users/dariadementeva/Desktop/pt_buffer_points_final.csv")
 # View(pt_buffer_points_final)
-
+ 
 pt_buffer_points_final <- pt_buffer_points_final[, -1]
-
+ 
 buffer_points_final <-
-  pt_buffer_points_final %>%
-  filter(coordinates_for_buffer_pt != '0,0') %>%
-  separate(coordinates_for_buffer_pt, into = c('lat', 'lon'), sep=",")
-
+   pt_buffer_points_final %>%
+   filter(coordinates_for_buffer_pt != '0,0') %>%
+   separate(coordinates_for_buffer_pt, into = c('lat', 'lon'), sep=",")
+ 
 buffer_points_final$lat <- gsub("[^0-9.-]", "", buffer_points_final$lat)
 buffer_points_final$lon <- gsub("[^0-9.-]", "", buffer_points_final$lon)
-
-buffer_points_final_batch1 <- buffer_points_final[1:682,] # batch 1
-
-buffer_points_final_batch2 <- buffer_points_final[683:1363,] # batch 2
-
+ 
+buffer_points_final_batch1 <- buffer_points_final[1:682,]
+ 
+buffer_points_final_batch2 <- buffer_points_final[683:1363,]
+ 
 # Read Batch 1
-
+ 
 walking_time_polygons_batch_1 <- st_read("/Users/dariadementeva/Desktop/Polygons_Walking_Times_Batch1.shp")
 walking_time_polygons_batch_1_5min <- walking_time_polygons_batch_1[walking_time_polygons_batch_1$FromBreak==0, ]
 walking_time_polygons_batch_1_10min <-  st_read("/Users/dariadementeva/Desktop/Polygons_WalkingTime_10min_Batch1.shp")
 walking_time_polygons_batch_1_15min <- st_read("/Users/dariadementeva/Desktop/Polygons_WalkingTime_15min_Batch1.shp")
-
+ 
 # Match with respondent id
-
-walking_time_polygons_5min_b1_rid <- cbind(walking_time_polygons_batch_1_5min, pt_buffer_points_final[1:682, c(1:3)])
-walking_time_polygons_10min_b1_rid <- cbind(walking_time_polygons_batch_1_10min, pt_buffer_points_final[1:682, c(1:3)])
-walking_time_polygons_15min_b1_rid <- cbind(walking_time_polygons_batch_1_15min, pt_buffer_points_final[1:682, c(1:3)])
-
+ 
+walking_time_polygons_5min_b1_rid <- cbind(walking_time_polygons_batch_1_5min[order(walking_time_polygons_batch_1_5min$FacilityID), ],
+                                            buffer_points_final_batch1[1:682, c(1:3)]) # 5-minute polygons
+ 
+walking_time_polygons_10min_b1_rid <- cbind(walking_time_polygons_batch_1_10min[order(walking_time_polygons_batch_1_10min$FacilityID), ],
+                                             buffer_points_final_batch1[1:682, c(1:3)]) # 10-minute polygons
+ 
+walking_time_polygons_15min_b1_rid <- cbind(walking_time_polygons_batch_1_15min[order(walking_time_polygons_batch_1_15min$FacilityID), ],
+                                             buffer_points_final_batch1[1:682, c(1:3)]) # 15-minute polygons
+ 
 driving_time_polygons_batch_1 <- st_read("/Users/dariadementeva/Desktop/Polygons_Driving_Times_Batch1.shp")
 driving_time_polygons_batch_1_5min <- driving_time_polygons_batch_1[driving_time_polygons_batch_1$FromBreak==0, ]
 driving_time_polygons_batch_1_10min <- st_read("/Users/dariadementeva/Desktop/Polygons_DrivingTime_10min_Batch1.shp")
 driving_time_polygons_batch_1_15min <-  st_read("/Users/dariadementeva/Desktop/Polygons_DrivingTime_15min_Batch1.shp")
-
+ 
 # Match with respondent id
-
-driving_time_polygons_5min_b1_rid <- cbind(driving_time_polygons_batch_1_5min, pt_buffer_points_final[1:682, c(1:3)])
-driving_time_polygons_10min_b1_rid <- cbind(driving_time_polygons_batch_1_10min, pt_buffer_points_final[1:682, c(1:3)])
-driving_time_polygons_15min_b1_rid <- cbind(driving_time_polygons_batch_1_15min, pt_buffer_points_final[1:682, c(1:3)])
-
-# Read Batch 2
-
+ 
+driving_time_polygons_5min_b1_rid <- cbind(driving_time_polygons_batch_1_5min[order(driving_time_polygons_batch_1_5min$FacilityID), ],
+                                            pt_buffer_points_final[1:682, c(1:3)]) # 5-minute polygons
+ 
+driving_time_polygons_10min_b1_rid <- cbind(driving_time_polygons_batch_1_10min[order(driving_time_polygons_batch_1_10min$FacilityID), ],
+                                             pt_buffer_points_final[1:682, c(1:3)]) # 10-minute polygons
+ 
+driving_time_polygons_15min_b1_rid <- cbind( driving_time_polygons_batch_1_15min[order(driving_time_polygons_batch_1_15min$FacilityID), ],
+                                              pt_buffer_points_final[1:682, c(1:3)]) # 15-minute polygons
+ 
+ # Read Batch 2
+ 
 walking_time_polygons_batch_2 <- st_read("/Users/dariadementeva/Desktop/Polygons_Walking_Times_Batch2.shp")
 walking_time_polygons_batch_2_5min <- walking_time_polygons_batch_2[walking_time_polygons_batch_2$FromBreak==0, ]
 walking_time_polygons_batch_2_10min <- st_read("/Users/dariadementeva/Desktop/Polygons_WalkingTime_10min_Batch2.shp")
 walking_time_polygons_batch_2_15min <- st_read("/Users/dariadementeva/Desktop/Polygons_WalkingTime_15min_Batch2.shp")
-
-# Match with respondent id
-
-walking_time_polygons_5min_b2_rid <- cbind(walking_time_polygons_batch_2_5min, pt_buffer_points_final[683:1363, c(1:3)])
-walking_time_polygons_10min_b2_rid <- cbind(walking_time_polygons_batch_2_10min, pt_buffer_points_final[683:1363, c(1:3)])
-walking_time_polygons_15min_b2_rid <- cbind(walking_time_polygons_batch_2_15min, pt_buffer_points_final[683:1363, c(1:3)])
-
+ 
+ # Match with respondent id
+ 
+walking_time_polygons_5min_b2_rid <- cbind(walking_time_polygons_batch_2_5min[order(walking_time_polygons_batch_2_5min$FacilityID), ],
+                                            buffer_points_final_batch2[1:681, c(1:3)]) # 5-minute polygons
+ 
+walking_time_polygons_10min_b2_rid <- cbind(walking_time_polygons_batch_2_10min[order(walking_time_polygons_batch_2_10min$FacilityID), ],
+                                             buffer_points_final_batch2[1:681, c(1:3)]) # 10-minute polygons
+ 
+walking_time_polygons_15min_b2_rid <- cbind(walking_time_polygons_batch_2_15min[order(walking_time_polygons_batch_2_15min$FacilityID), ],
+                                             buffer_points_final_batch2[1:681, c(1:3)]) # 15-minute polygons
+ 
+ 
 driving_time_polygons_batch_2 <- st_read("/Users/dariadementeva/Desktop/Polygons_Driving_Times_Batch2.shp")
 driving_time_polygons_batch_2_5min <- driving_time_polygons_batch_2[driving_time_polygons_batch_2$FromBreak==0, ]
 driving_time_polygons_batch_2_10min <- st_read("/Users/dariadementeva/Desktop/Polygons_DrivingTime_10min_Batch2.shp")
 driving_time_polygons_batch_2_15min <- st_read("/Users/dariadementeva/Desktop/Polygons_DrivingTime_15min_Batch2.shp")
-
-# Match with respondent id
-
-driving_time_polygons_5min_b2_rid <- cbind(driving_time_polygons_batch_2_5min, pt_buffer_points_final[683:1363, c(1:3)])
-driving_time_polygons_10min_b2_rid <- cbind(driving_time_polygons_batch_2_10min, pt_buffer_points_final[683:1363, c(1:3)])
-driving_time_polygons_15min_b2_rid <- cbind(driving_time_polygons_batch_2_15min, pt_buffer_points_final[683:1363, c(1:3)])
-
+ 
+ # Match with respondent id
+ 
+driving_time_polygons_5min_b2_rid <- cbind(driving_time_polygons_batch_2_5min[order(driving_time_polygons_batch_2_5min$FacilityID), ],
+                                            buffer_points_final_batch2[1:681, c(1:3)]) # 5-minute polygons
+ 
+driving_time_polygons_10min_b2_rid <- cbind( driving_time_polygons_batch_2_10min[order(driving_time_polygons_batch_2_10min$FacilityID), ],
+                                              buffer_points_final_batch2[1:681, c(1:3)]) # 10-minute polygons
+ 
+driving_time_polygons_15min_b2_rid <- cbind(driving_time_polygons_batch_2_15min[order(driving_time_polygons_batch_2_15min$FacilityID), ],
+                                             buffer_points_final_batch2[1:681, c(1:3)]) # 15-minute polygons
 
 ################################################################################################################
 # Calculate Area Size 
@@ -241,8 +260,7 @@ BE_ADMIN_SECTORS_sf <- st_as_sf(BE_ADMIN_SECTORS)
 ss_for_aw_interpolate <- BE_ADMIN_SECTORS_sf %>%
   left_join(
     contextual_measures_ss_for_buffers_full,
-    by = c("CD_REFNIS_SECTOR", "TX_SECTOR_DESCR_NL")
-  )
+    by = c("CD_REFNIS_SECTOR", "TX_SECTOR_DESCR_NL"))
 
 ss_for_aw_interpolate <- ss_for_aw_interpolate %>% 
   st_as_sf(coords = c("geometry"), 
@@ -945,23 +963,23 @@ get_summary_statistics <- function(df) {
   return(summary_stats)
 }
 
-# # store the result in a list
-# summary_list <- lapply(datasets, get_summary_statistics)
-# 
-# 
-# # save to an Excel file
-# wb <- createWorkbook()
-# 
-# # add a separate sheet for each dataset summary
-# for (dataset_name in names(summary_list)) {
-#   # Add a worksheet for the dataset
-#   addWorksheet(wb, dataset_name)
-# 
-#   # the summary statistics to the sheet
-#   writeData(wb, sheet = dataset_name, summary_list[[dataset_name]])
-# }
-# 
-# saveWorkbook(wb, "summary_statistics_24_09.xlsx", overwrite = TRUE)
+# store the result in a list
+summary_list <- lapply(datasets, get_summary_statistics)
+
+
+# save to an Excel file
+wb <- createWorkbook()
+
+# add a separate sheet for each dataset summary
+for (dataset_name in names(summary_list)) {
+  # Add a worksheet for the dataset
+  addWorksheet(wb, dataset_name)
+
+  # the summary statistics to the sheet
+  writeData(wb, sheet = dataset_name, summary_list[[dataset_name]])
+}
+
+saveWorkbook(wb, "summary_statistics_oct.xlsx", overwrite = TRUE)
 
 
 ################################################################################################################
@@ -1292,40 +1310,39 @@ pt_mun_model <- lm(
 summary(pt_mun_model)
 
 
-# model_list <- list(
-#   "W_5" = pt_walking_5min_model,
-#   "W_10" = pt_walking_10min_model,
-#   "W_15" = pt_walking_15min_model,
-#   "D_5" = pt_driving_5min_model,
-#   "D_10" = pt_driving_10min_model,
-#   "D_15" = pt_driving_15min_model,
-#   "SS" = pt_ss_model,
-#   "Mun" = pt_mun_model)
-# 
-# 
+ model_list <- list(
+   "W_5" = pt_walking_5min_model,
+   "W_10" = pt_walking_10min_model,
+   "W_15" = pt_walking_15min_model,
+   "D_5" = pt_driving_5min_model,
+   "D_10" = pt_driving_10min_model,
+   "D_15" = pt_driving_15min_model,
+   "SS" = pt_ss_model,
+   "Mun" = pt_mun_model)
+
+  
 # # Capture stargazer output as plain text
-# reg_output <- capture.output(
-#   stargazer(model_list,
-#             title = "Regression Models",
-#             column.labels = names(model_list),
-#             align = TRUE,
-#             no.space = TRUE,
-#             type="html",
-#             out="pt_results_ols_regular_se.html"))
+ reg_output <- capture.output(
+   stargazer(model_list,
+             title = "Regression Models",
+             column.labels = names(model_list),
+             align = TRUE,
+             no.space = TRUE,
+             type="html",
+             out="pt_results_ols_regular_se_oct.html"))
 
 
-# regression_outputs_to_save <- c(
-#   "pt_walking_5min_model",
-#   "pt_walking_10min_model",
-#   "pt_walking_15min_model",
-#   "pt_driving_5min_model",
-#   "pt_driving_10min_model",
-#   "pt_driving_15min_model",
-#   "pt_ss_model",
-#   "pt_mun_model"
-# )
+ regression_outputs_to_save <- c(
+   "pt_walking_5min_model",
+   "pt_walking_10min_model",
+   "pt_walking_15min_model",
+   "pt_driving_5min_model",
+   "pt_driving_10min_model",
+   "pt_driving_15min_model",
+   "pt_ss_model",
+   "pt_mun_model")
 # 
-# save(list = regression_outputs_to_save, file = "OLS_SE_regular_printout.RData")
+save(list = regression_outputs_to_save, file = "OLS_SE_regular_printout_upd.RData")
 
 ################################################################################################################
 # Check Assumptions
@@ -1443,15 +1460,15 @@ outputs_to_save <- c(
   "pt_mun_model_re"
 )
 
-# save(list = outputs_to_save, file = "OLS_HAC_SE_printout.RData")
+ save(list = outputs_to_save, file = "OLS_HAC_SE_printout_upd.RData")
 
-# reg_output_re <- capture.output(
-#   stargazer(model_list_re,
-#             title = "Regression Models",
-#             column.labels = names(model_list_re),
-#             align = TRUE,
-#             no.space = TRUE,
-#             type="html",
-#             out="pt_ugcp_upd.html"))
+reg_output_re <- capture.output(
+  stargazer(model_list_re,
+            title = "Regression Models",
+            column.labels = names(model_list_re),
+            align = TRUE,
+            no.space = TRUE,
+            type="html",
+            out="pt_ugcp_upd_oct.html"))
 
 
