@@ -2,7 +2,7 @@
 
 ## Background
 
-This repository is set up to showcase the analytical strategy undertaken for our article " “Unravelling Uncertain Geographic Context Problem for Intergroup Relations: Does Perceived Threat Depend on How the Neighborhood Context is Measured?" currently under review in The Journal of Community & Applied Social Psychology. The code supporting the findings of this study will be made available upon publication. Please note that analyses were undertaken using R, Rstudio and ArcGIS Pro.
+This repository is set up to showcase the analytical strategy undertaken for our article "Unravelling Uncertain Geographic Context Problem for Intergroup Relations: Does Perceived Threat Depend on How the Neighborhood Context is Measured?" currently under review in The Journal of Community & Applied Social Psychology. The code supporting the findings of this study will be made available upon publication. Please note that analyses were undertaken using R, Rstudio and ArcGIS Pro.
 
 ## Data Availability
 
