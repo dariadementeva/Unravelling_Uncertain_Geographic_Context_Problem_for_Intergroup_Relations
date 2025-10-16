@@ -253,6 +253,9 @@ calculate_median_area_sf(st_as_sf(BE_ADMIN_MUNTY))  # an st object, convert to s
 
 # contextual_measures_ss_for_buffers_full <- read_csv("/Users/dariadementeva/contextual_measures_ss_for_buffers_full_with_metadata.csv")
 
+# While developing the AWI solution, I encountered several errors. 
+# I resolved the errors by consulting ChatGPT for explanations and suggestions, but all final codebase and code decisions are my own
+
 contextual_measures_ss_for_buffers_full <- contextual_measures_ss_for_buffers_full[,-1]
 
 BE_ADMIN_SECTORS_sf <- st_as_sf(BE_ADMIN_SECTORS)
